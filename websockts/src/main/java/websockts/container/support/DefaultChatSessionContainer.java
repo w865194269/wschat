@@ -9,21 +9,23 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
 import websockts.container.Container;
+import websockts.container.WebSocketSessionContainer;
+
 /**
  * websocket session container
  * 
  * @author will
  *
  */
-@Component("sessionContainer")
-public class WebSocketSessionContainer implements Container<WebSocketSession, String>{
+@Component("chatContainer")
+public class DefaultChatSessionContainer implements WebSocketSessionContainer{
 	
 	private static final Map<String, WebSocketSession> seesionMaps= 
 			new ConcurrentHashMap<String, WebSocketSession>();
 
 	
-	public void add(WebSocketSession bean) {
-			seesionMaps.put(bean.getId(), bean);
+	public void add(WebSocketSession bean,String id) {
+			seesionMaps.put(id, bean);
 	}
 
 	public WebSocketSession get(String id) {
@@ -37,5 +39,9 @@ public class WebSocketSessionContainer implements Container<WebSocketSession, St
 	public Collection<WebSocketSession> get() {
 		return seesionMaps.values();
 	}
-	
+
+
+	public int size() {
+		return seesionMaps.size();
+	}
 }

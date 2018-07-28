@@ -12,7 +12,7 @@ public interface Container<T,Id extends Serializable> {
 	 * 添加新的元素
 	 * @param t
 	 */
-	public void add(T bean) ;
+	public void add(T bean,Id id) ;
 	
 	/**
 	 * 获取指定id 为pk的元素
@@ -33,5 +33,6 @@ public interface Container<T,Id extends Serializable> {
 	 */
 	public Collection<T> get();
 	
-	
+
+
 }

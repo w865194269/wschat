@@ -1,10 +1,22 @@
 package websockts.message;
 
 public class Message {
-	
+
+	private int type;
+
 	private String from ;
 	
-	private String content;
+	private Object to;
+
+	private Object content;
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 
 	public String getFrom() {
 		return from;
@@ -14,14 +26,29 @@ public class Message {
 		this.from = from;
 	}
 
-	public String getContent() {
+	public Object getTo() {
+		return to;
+	}
+
+	public void setTo(Object to) {
+		this.to = to;
+	}
+
+	public Object getContent() {
 		return content;
 	}
 
-	public void setContent(String content) {
+	public void setContent(Object content) {
 		this.content = content;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "Message{" +
+				"type=" + type +
+				", from='" + from + '\'' +
+				", to=" + to +
+				", content=" + content +
+				'}';
+	}
 }

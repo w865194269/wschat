@@ -9,7 +9,7 @@
 
     JCoding.api=api
 
-    JCoding.api.IP="localhost"
+    JCoding.api.IP="192.168.21.121"
     JCoding.api.PORT="8080"
 
     getIp=obj=>{

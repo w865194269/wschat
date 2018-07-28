@@ -7,32 +7,36 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import websockts.container.SessionDispather;
+import websockts.container.SessionService;
+import websockts.container.WSConstant;
+import websockts.container.WebSocketSessionService;
 
 public class ChatHandler extends TextWebSocketHandler{
 	
 	@Autowired
-	@Qualifier("sessionDispatcher")
-	private SessionDispather sessionDispatcher;
+	@Qualifier("chatSessionService")
+	private WebSocketSessionService chatSessionService;
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		System.out.println("handler message:"+message.getPayload());
-		session.sendMessage(new TextMessage(("Server call "+message.getPayload()+": "+session.getId()).getBytes()));
+		System.out.println(message.getPayload());
+		chatSessionService.send(httpSessionId(session),message.getPayload());
 	}
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		System.out.println("afterConnectionEstablished");
-		sessionDispatcher.connection(session);
-		System.out.println(session.getId()+":"+session.getUri());
+		chatSessionService.onLine(session, httpSessionId(session));
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		System.out.println("afterConnectionclosed");
+		chatSessionService.offLine(httpSessionId(session));
 	}
 
-	
+	private String httpSessionId(WebSocketSession session){
+		return (String) session.getAttributes().get(WSConstant.HTTP_SESSION_NAME);
+	}
 	
 }

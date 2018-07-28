@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="websockts:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="websockts.war">
+      <element id="artifact" artifact-name="websockts:war exploded" />
+    </root>
+  </artifact>
+</component>
