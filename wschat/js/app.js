@@ -27,6 +27,7 @@
         return obj.port==undefined?this.JCoding.api.PORT:obj.port;
     }
 
+
     JCoding.api.wsUrl=obj=>{// /websockts/chatHadler
         return "ws://"+this.getIp(obj)+":"+this.getPort(obj)+obj.url;
     }
@@ -46,6 +47,28 @@
             socket.send(txt);
         }
     }
+    //websocket id
+    JCoding.wsUserId=undefined
+    //在线列表
+    JCoding.onLists=[];
+
+    JCoding.status={}
+    //私聊
+    JCoding.status.MESSAGE_RECEIVE_SINGLE=0;
+    //组聊
+    JCoding.status.MESSAGE_RECEIVE_GROUP=1;
+    //推送通知
+    JCoding.status.MESSAGE_RECEIVE_NOTIFICATION=2;
+    //上线后获取在线列表
+    JCoding.status.MESSAGE_SEND_ONLINE_LIST=100;
+    //当前用户上线，并将上线消息通知给其他用户
+    JCoding.status.MESSAGE_SEND_ONLINE_NOTIFICATION=101;
+    //当前用户下线，并将下线消息通知给其他用户
+    JCoding.status.MESSAGE_SEND_OFFLINE_NOTIFICATION=102;
+    //正常聊天消息
+    JCoding.status.MESSAGE_SEND_CHAT=103;
+    //连接成功获取自己的信息，这里只是自己的id
+    JCoding.status.MESSAGE_SEND_SELF_INFO=104;
 
     JCoding.log=function(txt){
         console.log(txt)

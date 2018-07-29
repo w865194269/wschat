@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
+import com.sun.xml.internal.bind.v2.model.core.ID;
 import org.springframework.web.socket.WebSocketSession;
 
 public interface Container<T,Id extends Serializable> {
@@ -32,7 +33,18 @@ public interface Container<T,Id extends Serializable> {
 	 * @return
 	 */
 	public Collection<T> get();
-	
 
+	/**
+	 * 获取集合中id列表
+	 * @return
+	 */
+	public Collection<Id> getKeys();
+
+	/**
+	 * 获取除了自己以外的id列表
+	 * @param id
+	 * @return
+	 */
+	public Collection<Id> getOtherKeys(Id id);
 
 }

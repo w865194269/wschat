@@ -3,6 +3,15 @@ $("#chat_content").scrollTop($("#chat_content")[0].scrollHeight);
 
 let wsOpen=function(evt){
     $$.log("onOpen")
+    // for (let i=0;i<40;i++){
+    //     renderChatContent(
+    //         {
+    //             id: "bubble"+i,
+    //             info: "sadf"+i,
+    //             component: $("#chat_content")
+    //         })
+    //     $("#chat_content").scrollTop($("#chat_content")[0].scrollHeight);
+    // }
 }
 
 let wsClose=function(evt){
@@ -12,25 +21,31 @@ let wsClose=function(evt){
 let wsReceive=function (evt) {
     let data=JSON.parse(evt.data);
     let code=data.type;
-    $$.log(data.content)
+    $$.log(data)
     if (code==$$.status.MESSAGE_SEND_SELF_INFO){//用户登录之后获取自己的信息
         $$.wsUserId=data.content;
-        $$.log("online-self "+$$.wsUserId)
-    }
-    if (code==$$.status.MESSAGE_SEND_ONLINE_LIST){//用上线获取在线列表
+        $$.onLists=[]
+    } else if (code==$$.status.MESSAGE_SEND_ONLINE_LIST){//用户上线后去获取在线列表
         $$.onLists=$$.onLists.concat(data.content);
-        $$.log("lists +"+$$.onLists)
         renderOnLineList();
-    }
-    if (code==$$.status.MESSAGE_SEND_OFFLINE_NOTIFICATION){//新用户上线
-        $$.onLists.splice(-1,data.content);
+    }else if (code==$$.status.MESSAGE_SEND_ONLINE_NOTIFICATION){//别人上线
+        let index=$$.onLists.indexOf(data.content);
+        if (index<0){
+            $$.log(index+" : "+data.content)
+            $$.onLists.push(data.content);
+            $$.log($$.onLists)
+        }
+        renderOnLineList();
+    } else if (code==$$.status.MESSAGE_SEND_OFFLINE_NOTIFICATION){//别人下线
+        let index=$$.onLists.indexOf(data.content);
+        $$.onLists.splice(index,1);
         renderOnLineList();
     }
     if (code==$$.status.MESSAGE_SEND_CHAT){//聊天信息
         renderChatContent(
             {
-                id: "bubble",
-                info: evt.data,
+                id: new Date().getMilliseconds(),
+                info: data.content,
                 component: $("#chat_content")
             })
         $("#chat_content").scrollTop($("#chat_content")[0].scrollHeight);
@@ -56,7 +71,6 @@ function renderOnLineList() {
         }
         component.append(tmp)
     })
-
 }
 
 function renderChatContent(obj) {
@@ -64,6 +78,10 @@ function renderChatContent(obj) {
     tmp.attr("id",obj.id);
     tmp.css("display","block")
     tmp.find(".article").text(obj.info)
+    if (obj.type==100){
+        tmp.css("text-align","right");
+        tmp.find(".article").css("background","#ef8201")
+    }
     obj.component.append(tmp)
 }
 
@@ -93,7 +111,8 @@ $("#chat_send").on("click",function (evt) {
             {
                 id:"bubble",
                 info:infos.val(),
-                component:$("#chat_content")
+                component:$("#chat_content"),
+                type:100
             }
         );
         infos.val("")

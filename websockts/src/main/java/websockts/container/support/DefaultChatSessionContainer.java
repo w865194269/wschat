@@ -3,6 +3,7 @@ package websockts.container.support;
 import java.util.Collection;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class DefaultChatSessionContainer implements WebSocketSessionContainer{
 
 	
 	public void add(WebSocketSession bean,String id) {
-			seesionMaps.put(id, bean);
+		seesionMaps.put(id, bean);
 	}
 
 	public WebSocketSession get(String id) {
@@ -38,6 +39,16 @@ public class DefaultChatSessionContainer implements WebSocketSessionContainer{
 
 	public Collection<WebSocketSession> get() {
 		return seesionMaps.values();
+	}
+
+	public Collection<String> getKeys() {
+		return seesionMaps.keySet();
+	}
+
+	public Collection<String> getOtherKeys(String id) {
+		Set<String> keys = seesionMaps.keySet();
+		keys.remove(id);
+		return keys;
 	}
 
 

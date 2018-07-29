@@ -3,22 +3,20 @@ package websockts.container.support;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import websockts.container.AbstractChatSessionService;
-import websockts.container.Container;
+import websockts.container.WSConstant;
 import websockts.container.WebSocketSessionContainer;
-import websockts.container.WebSocketSessionService;
-import websockts.message.Message;
+import websockts.message.MessageReceive;
+import websockts.message.MessageSend;
 import websockts.parser.Parser;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
 @Component("chatSessionService")
-public class DefaultChatSessionService extends AbstractChatSessionService<Message> {
+public final class DefaultChatSessionService extends AbstractChatSessionService<MessageReceive> {
 
 	@Autowired
 	@Qualifier("chatContainer")
@@ -28,63 +26,62 @@ public class DefaultChatSessionService extends AbstractChatSessionService<Messag
 	@Qualifier("parser")
 	private Parser parser;
 
-
+	/**
+	 * 连接上有两个任务：(1) 当前用户获取所有在线用户，(2) 通知其他用户上线信息
+	 * @param session
+	 * @param id
+	 */
 	public void onLine(WebSocketSession session, String id) {
+		String strOnLine=parser.ObjectToString(new MessageSend(WSConstant.MESSAGE_SEND_ONLINE_NOTIFICATION,id));
 		container.add(session,id);
-		Collection<WebSocketSession> sessions = container.get();
-		for (WebSocketSession sess:sessions) {
-			if(!session.getId().equals(sess.getId())){
-				try {
-					sess.sendMessage(new TextMessage((id+": on-line:").getBytes()));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+		Collection<String> keys = container.getKeys();
+			//自己上线，将自己的连接信息返回
+		sendMessage(session,parser.ObjectToString(
+				new MessageSend(WSConstant.MESSAGE_SEND_SELF_INFO,id)));
+			//给自己发送在线列表
+		sendMessage(session,parser.ObjectToString(
+				new MessageSend(WSConstant.MESSAGE_SEND_ONLINE_LIST,keys)));
+		for (String key:keys) {//通知别人自己上线
+			System.out.println(key+":"+id);
+			if (key.equals(id)){
+				continue;
 			}
+			sendMessage(container.get(key),strOnLine);//通知其他用户自己上线
 		}
 	}
 
 
 	public void offLine(String id) {
 		container.remove(id);
-		Collection<WebSocketSession> sessions = container.get();
-		System.out.println(sessions+":" +sessions.size());
-		for (WebSocketSession sess:sessions) {
-			try {
-				if (sess!=null) {
-					sess.sendMessage(new TextMessage((id+": off-line").getBytes()));
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
+		Collection<String> keys = container.getKeys();
+		String strOffLine=parser.ObjectToString(new MessageSend(WSConstant.MESSAGE_SEND_OFFLINE_NOTIFICATION,id));
+		for (String key:keys) {
+			sendMessage(container.get(key),strOffLine);
 		}
 	}
 
 
-	protected Message parseMessage(String content) {
-		return parser.stringToObject(content,Message.class);
+	protected MessageReceive parseMessage(String content) {
+		return parser.stringToObject(content,MessageReceive.class);
 	}
 
-	protected void sendGroup(String id, Message message) {
+	protected void sendGroup(String id, MessageReceive message) {
 		Object objectTo=message.getTo();
+		String strChat=parser.ObjectToString(new MessageSend(WSConstant.MESSAGE_SEND_CHAT,id,message.getContent()));
 		if (objectTo instanceof List){
 			for (String uid : (List<String>)objectTo){//将消息发送所有人
-				System.out.println(uid);
-				WebSocketSession session = container.get(uid);
-				try {
-					if (session!=null) {//当前用户还在线
-						session.sendMessage(new TextMessage(((String) message.getContent()).getBytes()));
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				sendMessage(container.get(uid),strChat);
 			}
 		}
 	}
 
 
-	protected void sendSingle(String id, Message message) {
-
+	protected void sendSingle(String id, MessageReceive message) {
+		Object objectTo=message.getTo();
+		String strChat=parser.ObjectToString(new MessageSend(WSConstant.MESSAGE_SEND_CHAT,id,message.getContent()));
+		if (objectTo instanceof String){
+			sendMessage(container.get((String) objectTo),strChat);
+		}
 	}
 
 	/**
@@ -92,22 +89,17 @@ public class DefaultChatSessionService extends AbstractChatSessionService<Messag
 	 * @param id
 	 * @param message
 	 */
-	protected void sendAll(String id, Message message) {
+	protected void sendAll(String id, MessageReceive message) {
 
-		Collection<WebSocketSession> sessions = container.get();
-		WebSocketSession sessionSelf=container.get(id);
-		for (WebSocketSession sess:sessions) {
-			try {
-				if (sess!=null&&sess.getId()!=sessionSelf.getId()) {//当前用户还在线,且不是自己
-					sess.sendMessage(new TextMessage(((String) message.getContent()).getBytes()));
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+		Collection<String> keys = container.getKeys();
+		String strChat=parser.ObjectToString(new MessageSend(WSConstant.MESSAGE_SEND_CHAT,id,message.getContent()));
+		for (String key:keys) {
+			if (key.equals(id)){//是自己，无须给自己发送
+				continue;
 			}
+			sendMessage(container.get(key),strChat);
 		}
 	}
-
-	
 
 	protected void sendTypeError(String id) {
 

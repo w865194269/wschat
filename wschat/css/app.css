@@ -2,7 +2,7 @@
 #chat_left{
     float: left;
     background: white;
-    width: 60%;
+    width: 400px;
     height: 100%;
     border: 1px solid black;
 }
@@ -10,14 +10,14 @@
 #chat_right{
     float: left;
     background: white;
-    width: 40%;
+    width: 20px;
     height: 100%;
 
 }
 #chat_window{
     margin: 100px auto;
     background: darkgrey;
-    width: 50%;
+    width: 606px;
     height: 480px;
     border: 1px solid black;
     padding: 2px;
@@ -41,7 +41,7 @@
     height: 5%;
 }
 
-#bubble_tmp{
+#bubble_tmp,#onlist_tmp{
     display: none;
 }
 #chat_input input{

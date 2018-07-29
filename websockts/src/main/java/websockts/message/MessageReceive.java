@@ -1,6 +1,6 @@
 package websockts.message;
 
-public class Message {
+public class MessageReceive {
 
 	private int type;
 
@@ -44,7 +44,7 @@ public class Message {
 
 	@Override
 	public String toString() {
-		return "Message{" +
+		return "MessageReceive{" +
 				"type=" + type +
 				", from='" + from + '\'' +
 				", to=" + to +

@@ -5,13 +5,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import websockts.message.Message;
+import websockts.message.MessageReceive;
 import websockts.parser.Parser;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class ParserTest {
         }
         bi.close();
         System.out.println(sb.toString());
-        Message msg=parser.stringToObject(sb.toString(),Message.class);
+        MessageReceive msg=parser.stringToObject(sb.toString(),MessageReceive.class);
         System.out.println(msg);
         if (msg.getTo() instanceof List){
             for (int i=0;i<((List) msg.getTo()).size();i++){
@@ -46,7 +45,7 @@ public class ParserTest {
 
     @Test
     public void testObjectToStringString(){
-        Message message = new Message();
+        MessageReceive message = new MessageReceive();
         message.setType(1);
         String content="12123";
         message.setContent(content);
@@ -56,7 +55,7 @@ public class ParserTest {
 
     @Test
     public void testObjectToStringList(){
-        Message message = new Message();
+        MessageReceive message = new MessageReceive();
         message.setType(1);
         List<String> content=new ArrayList<String>();
         content.add("111111");

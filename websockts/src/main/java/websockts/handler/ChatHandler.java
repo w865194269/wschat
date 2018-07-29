@@ -19,19 +19,16 @@ public class ChatHandler extends TextWebSocketHandler{
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		System.out.println(message.getPayload());
 		chatSessionService.send(httpSessionId(session),message.getPayload());
 	}
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		System.out.println("afterConnectionEstablished");
 		chatSessionService.onLine(session, httpSessionId(session));
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		System.out.println("afterConnectionclosed");
 		chatSessionService.offLine(httpSessionId(session));
 	}
 

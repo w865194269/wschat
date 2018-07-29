@@ -1,12 +1,15 @@
 package websockts.container;
 
-import websockts.container.support.DefaultChatSessionService;
-import websockts.message.Message;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import websockts.message.MessageReceive;
+
+import java.io.IOException;
 
 /**
  *聊天抽象
  */
-public abstract class AbstractChatSessionService<T extends Message> implements WebSocketSessionService {
+public abstract class AbstractChatSessionService<T extends MessageReceive> implements WebSocketSessionService {
 
 
 
@@ -14,13 +17,13 @@ public abstract class AbstractChatSessionService<T extends Message> implements W
         T message=parseMessage(content);
 
         switch (message.getType()){
-            case WSConstant.MESSAGE_TYPE_SINGLE:
+            case WSConstant.MESSAGE_RECEIVE_SINGLE:
                 sendSingle(id,message);
                 break;
-            case WSConstant.MESSAGE_TYPE_GROUP:
+            case WSConstant.MESSAGE_RECEIVE_GROUP:
                 sendGroup(id,message);
                 break;
-            case WSConstant.MESSAGE_TYPE_ALL:
+            case WSConstant.MESSAGE_RECEIVE_NOTIFICATION:
                 sendAll(id,message);
                 break;
             default:
@@ -50,4 +53,19 @@ public abstract class AbstractChatSessionService<T extends Message> implements W
      * 信息发送类型出错
      */
     protected  abstract void sendTypeError(String id);
+
+
+    /**
+     * 发送消息
+     */
+    protected void sendMessage(WebSocketSession session,String content){
+        if (session==null||content==null||content.length()==0){
+            return;
+        }
+        try {
+            session.sendMessage(new TextMessage(content.getBytes()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

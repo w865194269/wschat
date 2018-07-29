@@ -2,35 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chat</title>
-
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/app.css">
 
 
 </head>
 <body>
 
-<div id="chat_window">
-    <div id="chat_left">
-        <div id="chat_content">
+<div class="container">
+    <div id="chat_window"  class="row">
+        <div class="col-md-2 col-sm-2">
+            <div id="chat_group" class="col-md-12">
+                to be done
+            </div>
+        </div>
+        <div id="chat_left" class="col-md-7 col-sm-7">
+            <div id="chat_content" class="row">
+
+            </div>
+            <div id="chat_input" class="row">
+                <input type="text" id="chat_info" class="col-md-12">
+            </div>
+            <div id="chat_bar" class="row">
+                <div class="col-md-10"></div>
+                <input type="button" value="send"class="col-md-2" id="chat_send">
+            </div>
 
         </div>
-        <div id="chat_input">
-            <input type="text" id="chat_info">
-        </div>
-        <div id="chat_bar">
-            <input type="button" value="send" id="chat_send">
+        <div id="chat_right" class="col-md-3 col-sm-3">
+
         </div>
     </div>
-    <div id="chat_right">
-        online lists
-    </div>
 </div>
-<!--隐藏的聊天气泡模板-->
-<div id="bubble_tmp">
-    <span></span>
-    <div class="article"></div>
+
+<div id="bubble_tmp" class="bubble">
+    <span class="article"></span>
 </div>
+<div id="onlist_tmp">
+    <div class="online_item"></div>
+</div>
+
 
 
 <script src="js/jquery.js"></script>
