@@ -1,7 +1,7 @@
 package websockts.parser;
 
 /**
- *
+ *消息解析
  * @param <T>
  */
 public interface Parser{

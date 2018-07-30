@@ -1,7 +1,5 @@
 package websockts.container;
 
-import org.springframework.web.socket.WebSocketSession;
-
 import java.io.Serializable;
 
 public interface SessionService<T,PK extends Serializable> {

@@ -28,11 +28,6 @@ public interface Container<T,Id extends Serializable> {
 	 */
 	public void remove(Id id);
 	
-	/**
-	 * 获取全部的 T
-	 * @return
-	 */
-	public Collection<T> get();
 
 	/**
 	 * 获取集合中id列表
@@ -40,11 +35,6 @@ public interface Container<T,Id extends Serializable> {
 	 */
 	public Collection<Id> getKeys();
 
-	/**
-	 * 获取除了自己以外的id列表
-	 * @param id
-	 * @return
-	 */
-	public Collection<Id> getOtherKeys(Id id);
+	
 
 }

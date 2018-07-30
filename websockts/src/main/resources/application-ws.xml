@@ -21,7 +21,7 @@
 		<websocket:handshake-interceptors>
 			<bean class="websockts.interceptor.ChatHandlerInterceptor"></bean>
 		</websocket:handshake-interceptors>
-		
+	
 	</websocket:handlers>
 
 

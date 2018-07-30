@@ -13,7 +13,7 @@ import websockts.container.Container;
 import websockts.container.WebSocketSessionContainer;
 
 /**
- * websocket session container
+ * chat session container
  * 
  * @author will
  *
@@ -37,20 +37,9 @@ public class DefaultChatSessionContainer implements WebSocketSessionContainer{
 		seesionMaps.remove(id);
 	}
 
-	public Collection<WebSocketSession> get() {
-		return seesionMaps.values();
-	}
-
 	public Collection<String> getKeys() {
 		return seesionMaps.keySet();
 	}
-
-	public Collection<String> getOtherKeys(String id) {
-		Set<String> keys = seesionMaps.keySet();
-		keys.remove(id);
-		return keys;
-	}
-
 
 	public int size() {
 		return seesionMaps.size();

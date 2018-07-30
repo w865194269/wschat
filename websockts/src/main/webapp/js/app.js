@@ -1,6 +1,6 @@
 (function (global,factory) {
 
-    factory(global)
+    factory(global);
 
 })(typeof(window) !== "undefined" ? window : this,function (window) {
 
@@ -9,12 +9,11 @@
 
     JCoding.api=api;
 
-    JCoding.api.IP="192.168.21.121";
-    JCoding.api.PORT="8080";
+    JCoding.api.IP="10.222.29.181";
+    JCoding.api.PORT="9090";
 
     getIp=obj=>{
         if (obj){
-            console.log(this.$$);
             return this.JCoding.api.IP
         }
         return obj.ip==undefined?this.JCoding.IP:obj.ip;

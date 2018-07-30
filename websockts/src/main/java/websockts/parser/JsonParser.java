@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-
+/**
+ * json && object 转换工具类
+ * @author will
+ *
+ */
 @Component("parser")
 public class JsonParser implements Parser {
 

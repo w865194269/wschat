@@ -10,7 +10,13 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import websockts.container.SessionService;
 import websockts.container.WSConstant;
 import websockts.container.WebSocketSessionService;
+import websockts.interceptor.ChatHandlerInterceptor;
 
+/**
+ * 聊天信息处理
+ * @author will
+ *
+ */
 public class ChatHandler extends TextWebSocketHandler{
 	
 	@Autowired
@@ -33,7 +39,7 @@ public class ChatHandler extends TextWebSocketHandler{
 	}
 
 	private String httpSessionId(WebSocketSession session){
-		return (String) session.getAttributes().get(WSConstant.HTTP_SESSION_NAME);
+		return (String) session.getAttributes().get(ChatHandlerInterceptor.HTTP_SESSION_NAME);
 	}
 	
 }

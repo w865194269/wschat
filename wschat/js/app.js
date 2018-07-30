@@ -33,7 +33,7 @@
     }
 
     JCoding.api.httpUrl=obj=>{
-        return "http://"+this.JCoding.api.getIp(obj)+":"+this.JCoding.api.getPort(obj)+obj.url;
+        return "http://"+this.JCoding.api.getIp(obj)+":"+this.getPort(obj)+obj.url;
     }
 
     JCoding.WebSocket=function(obj){

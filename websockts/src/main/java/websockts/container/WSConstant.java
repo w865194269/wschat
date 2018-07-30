@@ -1,15 +1,14 @@
 package websockts.container;
 
 public class WSConstant {
-     //http session的名字，用于标记WebSocketSession
-     public final static String HTTP_SESSION_NAME="http_session";
+
 
      //私聊
-     final static int MESSAGE_RECEIVE_SINGLE=0;
+     public final static int MESSAGE_RECEIVE_SINGLE=0;
      //组聊
-     final static int MESSAGE_RECEIVE_GROUP=1;
+     public final static int MESSAGE_RECEIVE_GROUP=1;
      //推送通知
-     final static int MESSAGE_RECEIVE_NOTIFICATION=2;
+     public final static int MESSAGE_RECEIVE_NOTIFICATION=2;
 
      //上线后获取在线列表
      public final static int MESSAGE_SEND_ONLINE_LIST=100;

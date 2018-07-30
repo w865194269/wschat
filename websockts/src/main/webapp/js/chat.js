@@ -2,7 +2,7 @@
 $("#chat_content").scrollTop($("#chat_content")[0].scrollHeight);
 
 let wsOpen=function(evt){
-    $$.log("onOpen")
+    $$.log("onOpen");
 }
 
 let wsClose=function(evt){
@@ -21,9 +21,7 @@ let wsReceive=function (evt) {
     }else if (code==$$.status.MESSAGE_SEND_ONLINE_NOTIFICATION){//别人上线
         let index=$$.onLists.indexOf(data.content);
         if (index<0){
-            $$.log(index+" : "+data.content);
             $$.onLists.push(data.content);
-            $$.log($$.onLists);
         }
         renderOnLineList();
     } else if (code==$$.status.MESSAGE_SEND_OFFLINE_NOTIFICATION){//别人下线
@@ -40,7 +38,6 @@ let wsReceive=function (evt) {
             })
         $("#chat_content").scrollTop($("#chat_content")[0].scrollHeight);
     }
-
 }
 
 let wsConnectError=function (evt) {
@@ -48,36 +45,35 @@ let wsConnectError=function (evt) {
 }
 
 function renderOnLineList() {
-    $$.log("renderOnLineList "+$$.onLists)
     let component=$("#chat_right");
     component.empty();
     $$.onLists.forEach(function (item) {
         let tmp=$("#onlist_tmp").clone();
         tmp.attr("id",item);
-        tmp.css("display","block")
-        tmp.find(".online_item").text(item)
+        tmp.css("display","block");
+        tmp.find(".online_item").text(item);
         if (item==$$.wsUserId){
             tmp.css("background","red");
         }
-        component.append(tmp)
+        component.append(tmp);
     })
 }
 
 function renderChatContent(obj) {
     let tmp=$("#bubble_tmp").clone();
     tmp.attr("id",obj.id);
-    tmp.css("display","block")
-    tmp.find(".article").text(obj.info)
+    tmp.css("display","block");
+    tmp.find(".article").text(obj.info);
     if (obj.type==$$.bubble){
         tmp.css("text-align","right");
-        tmp.find(".article").css("background","#ef8201")
+        tmp.find(".article").css("background","#ef8201");
     }
-    obj.component.append(tmp)
+    obj.component.append(tmp);
 }
 
 let ws={
-    url:$$.api.wsUrl({url:"/chatHadler"}),
-    // url:$$.api.wsUrl({url:"/websockts/chatHadler"}),
+    url:$$.api.wsUrl({url:"/websockts/chatHadler"}),
+    // url:$$.api.wsUrl({url:"/chatHadler"}),
     onOpen:wsOpen,
     onClose:wsClose,
     onReceive:wsReceive,
@@ -90,7 +86,6 @@ $("#chat_send").on("click",function (evt) {
 
     let infos=$("#chat_info");
     if(infos.val().length>0){
-        console.log($("#chat_info").val());
         //发送信息
         let info={}
         info.type=2;
@@ -105,7 +100,7 @@ $("#chat_send").on("click",function (evt) {
                 type:$$.bubble
             }
         );
-        infos.val("")
+        infos.val("");
         $("#chat_content").scrollTop($("#chat_content")[0].scrollHeight);
     }
 })

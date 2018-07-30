@@ -7,10 +7,9 @@ import websockts.message.MessageReceive;
 import java.io.IOException;
 
 /**
- *聊天抽象
+ *聊天抽象Session
  */
 public abstract class AbstractChatSessionService<T extends MessageReceive> implements WebSocketSessionService {
-
 
 
     public void send(String id,String content) {
@@ -27,7 +26,7 @@ public abstract class AbstractChatSessionService<T extends MessageReceive> imple
                 sendAll(id,message);
                 break;
             default:
-                    sendTypeError(id);
+                sendTypeError(id);
         }
     }
 

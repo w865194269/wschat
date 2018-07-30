@@ -27,7 +27,7 @@ public final class DefaultChatSessionService extends AbstractChatSessionService<
 	private Parser parser;
 
 	/**
-	 * 连接上有两个任务：(1) 当前用户获取所有在线用户，(2) 通知其他用户上线信息
+	 * 上线后有两个任务：(1) 自己的信息 (2) 当前用户获取所有在线用户，(3) 通知其他用户上线信息
 	 * @param session
 	 * @param id
 	 */
@@ -42,7 +42,6 @@ public final class DefaultChatSessionService extends AbstractChatSessionService<
 		sendMessage(session,parser.ObjectToString(
 				new MessageSend(WSConstant.MESSAGE_SEND_ONLINE_LIST,keys)));
 		for (String key:keys) {//通知别人自己上线
-			System.out.println(key+":"+id);
 			if (key.equals(id)){
 				continue;
 			}
@@ -50,7 +49,9 @@ public final class DefaultChatSessionService extends AbstractChatSessionService<
 		}
 	}
 
-
+	/**
+	 * 下线，任务:（1）session移除；(2) 通知其他在线用户已经自己下线
+	 */
 	public void offLine(String id) {
 		container.remove(id);
 		Collection<String> keys = container.getKeys();
@@ -75,7 +76,7 @@ public final class DefaultChatSessionService extends AbstractChatSessionService<
 		}
 	}
 
-
+	
 	protected void sendSingle(String id, MessageReceive message) {
 		Object objectTo=message.getTo();
 		String strChat=parser.ObjectToString(new MessageSend(WSConstant.MESSAGE_SEND_CHAT,id,message.getContent()));
