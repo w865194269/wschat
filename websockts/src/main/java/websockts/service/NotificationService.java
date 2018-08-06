@@ -11,4 +11,6 @@ public interface NotificationService {
 	 */
 	public Message notificationAllUsers(Message message);
 	
+	public Message notificationSingle(String uid,Message message);
+	
 }

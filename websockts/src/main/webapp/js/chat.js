@@ -55,6 +55,20 @@ function renderOnLineList() {
         if (item==$$.wsUserId){
             tmp.css("background","red");
         }
+        tmp.on("dblclick",function (evt) {
+            $$.log(this.id);
+            let groups=$("#chat_group");
+            if (groups.find("#chat_"+this.id).length==0){
+                let chat_tmp=$("#chat_list_tmp").clone();
+                chat_tmp.attr("id","chat_"+this.id);
+                chat_tmp.css("display","block");
+                chat_tmp.find(".chat_name").text(this.id);
+                chat_tmp.on("dblclick",function (evt) {
+                    this.remove();
+                });
+                groups.append(chat_tmp);
+            }
+        });
         component.append(tmp);
     })
 }
@@ -82,13 +96,30 @@ let ws={
 
 let wsSend=$$.WebSocket(ws);
 
-$("#chat_send").on("click",function (evt) {
+function isNotification() {
 
+    let groups=$("#chat_group").find(".chat_obj");
+    if (groups.length==0){//左侧聊天人数为空，通知全部
+        return {type:$$.status.MESSAGE_RECEIVE_NOTIFICATION};
+    }else if(groups.length==1){//左侧只有一个：私聊
+        let single=groups[0].id.slice(5);
+        return {type:$$.status.MESSAGE_RECEIVE_SINGLE,to:single}
+    }else{//右侧多个，群聊
+        let tos=[];
+        for(let i=0;i<groups.length;i++){
+            tos.push(groups[i].id.slice(5));
+        }
+        return {type:$$.status.MESSAGE_RECEIVE_GROUP,to:tos}
+    }
+}
+
+$("#chat_send").on("click",function (evt) {
+    $$.log(isNotification())
     let infos=$("#chat_info");
     if(infos.val().length>0){
         //发送信息
-        let info={}
-        info.type=2;
+        let info=isNotification()
+        // info.type=2;
         info.content=$("#chat_info").val();
         wsSend(JSON.stringify(info));
         //聊天内容记录框记录添加

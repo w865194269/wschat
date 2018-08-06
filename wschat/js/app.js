@@ -1,20 +1,19 @@
 (function (global,factory) {
 
-    factory(global)
+    factory(global);
 
 })(typeof(window) !== "undefined" ? window : this,function (window) {
 
-    let JCoding={}
-    let api={}
+    let JCoding={};
+    let api={};
 
-    JCoding.api=api
+    JCoding.api=api;
 
-    JCoding.api.IP="localhost"
-    JCoding.api.PORT="8080"
+    JCoding.api.IP="10.222.29.181";
+    JCoding.api.PORT="9090";
 
     getIp=obj=>{
         if (obj){
-            console.log(this.$$)
             return this.JCoding.api.IP
         }
         return obj.ip==undefined?this.JCoding.IP:obj.ip;
@@ -22,7 +21,7 @@
 
     getPort=obj=> {
         if (obj==undefined){
-            return this.JCoding.api.PORT
+            return this.JCoding.api.PORT;
         }
         return obj.port==undefined?this.JCoding.api.PORT:obj.port;
     }
@@ -33,26 +32,29 @@
     }
 
     JCoding.api.httpUrl=obj=>{
-        return "http://"+this.JCoding.api.getIp(obj)+":"+this.getPort(obj)+obj.url;
+        return "http://"+this.JCoding.api.getIp(obj)+":"+this.JCoding.api.getPort(obj)+obj.url;
     }
 
     JCoding.WebSocket=function(obj){
         let socket=new WebSocket(obj.url)
-        $$.log(socket)
         socket.onopen=obj.onOpen;
         socket.onclose=obj.onClose;
         socket.onmessage=obj.onReceive;
         socket.onerror=obj.onError;
         return function (txt) {
-            socket.send(txt);
+            if(socket.readyState == socket.OPEN) {
+                socket.send(txt);
+            }else{
+                console.log("connect error")
+            }
         }
     }
     //websocket id
-    JCoding.wsUserId=undefined
-    //在线列表
-    JCoding.onLists=[];
-
-    JCoding.status={}
+    JCoding.wsUserId=undefined;
+    JCoding.onLists=[];//在线用户列表
+    JCoding.onChats=[];//正在聊天的人员，length=0群发
+    JCoding.bubble=100;//自己发送消息状态
+    JCoding.status={};
     //私聊
     JCoding.status.MESSAGE_RECEIVE_SINGLE=0;
     //组聊
@@ -71,7 +73,7 @@
     JCoding.status.MESSAGE_SEND_SELF_INFO=104;
 
     JCoding.log=function(txt){
-        console.log(txt)
+        console.log(txt);
     }
 
     window.$$ = window.JCoding=JCoding;

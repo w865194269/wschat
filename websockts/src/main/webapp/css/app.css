@@ -20,6 +20,11 @@
     height: 15%;
 }
 
+#chat_group{
+    overflow: auto;
+    padding-left: 1px;
+}
+
 #chat_bar{
     height: 5%;
 }

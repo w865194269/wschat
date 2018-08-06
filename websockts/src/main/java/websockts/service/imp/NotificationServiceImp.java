@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import websockts.container.WSConstant;
 import websockts.container.WebSocketSessionService;
@@ -36,6 +37,17 @@ public class NotificationServiceImp implements NotificationService {
 		MessageReceive receive=new MessageReceive();
 		receive.setType((WSConstant.MESSAGE_RECEIVE_NOTIFICATION));
 		receive.setContent(message.getContent());
+		sessionService.send("123123123", parser.ObjectToString(receive));
+		return message;
+	}
+
+
+	public Message notificationSingle(String uid, Message message) {
+		message.setId(UUID.randomUUID().toString());
+		MessageReceive receive=new MessageReceive();
+		receive.setType((WSConstant.MESSAGE_RECEIVE_SINGLE));
+		receive.setContent(message.getContent());
+		receive.setTo(uid);
 		sessionService.send("123123123", parser.ObjectToString(receive));
 		return message;
 	}

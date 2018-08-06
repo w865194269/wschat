@@ -42,7 +42,11 @@
         socket.onmessage=obj.onReceive;
         socket.onerror=obj.onError;
         return function (txt) {
-            socket.send(txt);
+        	if(socket.readyState == socket.OPEN) {
+                socket.send(txt);
+            }else{
+                console.log("connect error")
+            }
         }
     }
     //websocket id
